@@ -1,0 +1,50 @@
+<html>
+ <head>
+  [% title = "Index of " _ request.path %]
+  <title>Index of [% title | html %]</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <style type='text/css'>
+table { width:100%%; }
+.name { text-align:left; }
+.size, .mtime { text-align:right; }
+.type { width:11em; }
+.mtime { width:15em; }
+  </style>
+</head><body>
+<h1>[% title | html %]</h1>
+<hr />
+
+<p>
+remote: <a href="[% remote %]">[% remote %]</a> <br>
+branch: [% branch %]
+</p>
+<p>
+[% IF copy_clean %]
+  Working copy is clean.
+[% ELSE %]
+  Working copy is <b>not clean</b>.
+[% END %]
+[% IF dir_clean %]
+  Directory is clean.
+[% ELSE %]
+  Directory is <b>not clean</b>.
+[% END %]
+</p>
+<table>
+  <tr>
+    <th class='name'>Name</th>
+    <th class='status'>Status</th>
+    <th class='mtime'>Last Modified</th>
+    <th class='size'>Size</th>
+  </tr>
+  [% FOR file IN files %]
+    [% INCLUDE file.html %]
+  [% END %]
+</table>
+<hr />
+Status:
+  [% FOR s IN status %]<pre>[% s %]</pre>[% END %]
+<hr />
+Ignored:
+  [% FOR s IN ignored %]<pre>[% s %]</pre>[% END %]
+</body></html>
