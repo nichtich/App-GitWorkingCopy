@@ -23,7 +23,17 @@ builder {
                 my $env = shift;
                 
                 # do processing, optionally add to tt.vars
-                
+                # e.g.:
+
+                my $logfile = '/tmp/mylog';
+                my $logsep  = '^---*$';
+           
+                # action=log
+                my $num = 2;
+                my $log = `tac -b -r -s $logsep $logfile | awk '/$logsep/{c++}c>$num{exit}{print}`;
+
+                [200,['Content-Type' => 'text/plain'], $log];
+
                 return $app->($env);
             };
         };
