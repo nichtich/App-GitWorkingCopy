@@ -1,14 +1,17 @@
 use Plack::Builder;
-use Plack::App::Directory::Template;
+use Plack::App::Directory::Template 0.24;
 use Plack::App::GitHub::WebHook;
-use Git::Repository;
+use Git::Repository qw(Log Status);
 
 use Plack::Middleware::Debug::Panel;
 
-my $webhook = Plack::App::GitHub::WebHook->new( hook => sub {
+my $webhook = Plack::App::GitHub::WebHook->new(
+  hook => sub {
     # TODO
+    # git update-server-info # to allow cloning via HTTP(S)
 })->to_app;
 
+use Git::WorkingCopy;
 
 builder {
     enable 'Debug';
@@ -16,6 +19,8 @@ builder {
 
     enable_if { $_[0]->{REQUEST_METHOD} eq 'POST' }
         sub { $webhook; };
+
+	# TODO
     enable_if { Plack::Request->new($_[0])->param('action') }
         sub {
             my $app = shift;
@@ -34,46 +39,17 @@ builder {
 
                 [200,['Content-Type' => 'text/plain'], $log];
 
+				$env->{'tt.vars'}->{log} = "...";
+
                 return $app->($env);
             };
         };
-    Plack::App::Directory::Template->new(
-        templates => 'templates',
-        filter    => sub {
-            my $vars = shift;
-            my $git  = Git::Repository->new( work_tree => $vars->{dir} );
 
-            $vars->{remote} = $1 if `git remote -v` =~ /^origin\s+(.+)\s+\(fetch\)$/m;
-            $vars->{branch} = $1 if `git branch --list` =~ /^\*\s+(.+)$/m;
+	enable 'Static',
+		path => qr{\.(css|js|png|ico)$},
+		root => 'templates',
+		pass_through => 1;
 
-            $vars->{copy_clean} = !$git->run('status','--porcelain');
-
-            my @ignore = qw(./ .git/);            
-
-            my $dir = $vars->{dir}.'/';
-
-            if (!$vars->{copy_clean}) {
-                my @status = $git->run('status','--porcelain','--',$dir);
-                $vars->{dir_clean}  = !@status;
-
-# TODO
-                @status = $git->run('status','-s','--ignored','--', $dir);
-            
-#                $dir = '' if $dir eq './';
-#                my %ignored = map { $_ => 1 } map {
-#                    my $l = length($dir);
-#                    substr($_,$l);# if substr($_,0,$l) eq "!! $dir";
-#                } @status;
-
-                $vars->{status} = \@status;
-            }
-            
-            my %ignored = map {$_=>1} @ignore;
-            $vars->{files} = [
-                grep { !$ignored{ $_->{name} } } @{ $vars->{files} }
-            ];
-
-            $vars->{ignored} = \@ignore;
-        }
-    );
+    Git::WorkingCopy->new( templates => 'templates' );
 };
+

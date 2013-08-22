@@ -1,7 +1,11 @@
 [% USE date -%]
 <tr>
-  <td class='name'><a href='[% file.url | html %]'>[% file.name | html %]</a></td>
-  <td class='status'>[% file.status %]</td>
-  <td class='mtime'>[% date.format( file.stat.mtime  ) %]</td>
-  <td class='size'>[% file.stat.size %]</td>
+  <!-- TODO: color status -->
+  <td class='status'>[% file.status.status %]</td>
+  <td class='left'><a href='[% file.url | html %]'>[% file.name | html %]</a>
+    [% IF file.status.path2 %] &lt;- [% file.status.path1 | html %][% END %]
+  </td>
+  <td class='left'>[% file.commit.message | html %]</td>
+  <td class='right'>[% date.format( file.stat.mtime ) %]</td>
+  <td class='right'>[% file.stat.size %]</td>
 </tr>

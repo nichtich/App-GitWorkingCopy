@@ -1,0 +1,33 @@
+div#directory {
+  margin: 0em;
+  font-family: sans-serif;
+  font-size: 10pt;
+  color: #333;
+  background: #fff;
+  padding: 4px;
+}
+
+a {
+  color: blue;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+table.files {
+  width:100%%; 
+  border: none;
+  border-collapse: collapse;
+}
+
+td { font-family: monospace; }
+
+.left { text-align: left; }
+.right { text-align: right; }
+.status { text-align: right; padding-right: 1em; }
+.name { text-align:left; }
+.size, .mtime { text-align:right; }
+.type { width:11em; }
+.mtime { width:15em; 
