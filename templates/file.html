@@ -1,11 +1,26 @@
 [% USE date -%]
 <tr>
   <!-- TODO: color status -->
+  <td class="mode">[% file.mode_string %]</td>
   <td class='status'>[% file.status.status %]</td>
-  <td class='left'><a href='[% file.url | html %]'>[% file.name | html %]</a>
+  <td class='filename[% IF file.name.substr(-1,1) == "/"; " dir"; END %]'>
+    <a href='[% file.url | html %]'>[% file.name | html %]</a>
     [% IF file.status.path2 %] &lt;- [% file.status.path1 | html %][% END %]
   </td>
-  <td class='left'>[% file.commit.message | html %]</td>
-  <td class='right'>[% date.format( file.stat.mtime ) %]</td>
+  <td class="gh">
+	  [% IF gh AND file.commit %]
+        <a href="[% gh %]/tree/master[%path%][% file.name %]">gh</a>
+      [% END %]
+  </td>
+  <td class='left'>
+	  [% IF gh AND file.commit %]
+		<a href="[%gh%]/commit/[%file.commit.commit%]">[% file.commit.message | html %]</a>
+	  [% ELSE %]
+		[% file.commit.message | html %]
+	  [% END %]
+  </td>
+  <td class='right'>
+      <!--[% date.format(file.commit.author_gmtime) %]<br-->
+      [% date.format( file.stat.mtime ) %]</td>
   <td class='right'>[% file.stat.size %]</td>
 </tr>

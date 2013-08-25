@@ -26,8 +26,17 @@ td { font-family: monospace; }
 
 .left { text-align: left; }
 .right { text-align: right; }
-.status { text-align: right; padding-right: 1em; }
-.name { text-align:left; }
+
+.mode { width: 10em; }
+.status { text-align: right; padding-right: 1em; width: 3em; }
+
+.filename { text-align: left }
+.filename a { color: black; }
+/* TODO: just use $LS_COLORS from shell */
+.dir a { font-weight: bold; color: blue; }
+
 .size, .mtime { text-align:right; }
 .type { width:11em; }
-.mtime { width:15em; 
+.mtime { width:15em; }
+
+

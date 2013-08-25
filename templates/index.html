@@ -11,27 +11,13 @@
 <div id='directory'>
 <h1>[% title | html %]</h1>
 <hr />
-
-<p>
-origin: <a href="[% origin %]">[% origin %]</a> <br>
-branch: [% branch %]
-</p>
-<p>
-[% IF copy_clean %]
-  Working copy is clean.
-[% ELSE %]
-  Working copy is <b>not clean</b>.
-[% END %]
-[% IF dir_clean %]
-  Directory is clean.
-[% ELSE %]
-  Directory is <b>not clean</b>.
-[% END %]
-</p>
+<p class="branch">## [% branch %]</p>
 <table class="files">
   <tr>
-    <th class='status'>Status</th>
+    <th class='mode'></th>
+    <th class='status'></th>
     <th class='left'>Name</th>
+    <th class='gh'></th>
     <th class='left'>Commit</th>
     <th class='mtime'>Last Modified</th>
     <th class='right'>Size</th>
@@ -41,6 +27,11 @@ branch: [% branch %]
   [% END %]
 </table>
 <hr/>
+<p>origin: <a href="[% gh ? gh : origin %]">[% origin %]</a></p>
+<p>
+Working copy is [% copy_clean ? "clean" : "<b>not clean</b>" %].
+Directory is [% dir_clean ? "clean" : "<b>not clean</b>" %].
+</p>
 </div>
 </body>
 </html>
