@@ -59,3 +59,5 @@ L<Plack::Middleware::GitStatus>,
 L<Plack::Middleware::GitRevisionInfo>
 
 =cut
+
+=encoding utf8

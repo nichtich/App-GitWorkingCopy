@@ -29,6 +29,8 @@ sub call {
 
 1;
 
+=encoding utf8
+
 __END__
 * action=reset
   Reset local changes
